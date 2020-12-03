@@ -14,7 +14,13 @@ public class Process {
 
     public Process(int id) {
         this.id = id;
-        this.memory = Utils.getRandomInteger(10,Configuration.memoryVolume/2);
+        this.memory = Utils.getRandomInteger(10,Configuration.memoryVolume/2);  //заменить все цифры на константы
+        this.priority = Utils.getRandomInteger( Configuration.maxPriority);
+        this.time = Utils.getRandomInteger(10,100);
+        this.timeIn = ClockGenerator.getTime();
+        this.burstTime = 0;
+        this.name = "P" + this.id;
+        this.state = State.Ready;
     }
 
     @Override
