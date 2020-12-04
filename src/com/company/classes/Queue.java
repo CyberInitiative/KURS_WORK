@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Queue {
     private ArrayList<Process> queue;
+    private int lastID;
 
     public int getLastID() {
         return lastID;
@@ -13,31 +14,36 @@ public class Queue {
         this.lastID = lastID;
     }
 
-    private int lastID;
-
     public Queue() {
         this.queue = new ArrayList<>();
         this.lastID = 1;
-
     }
 
-    public void add()
+    public void add(Process process){
+        this.queue.add(process);
+    }
+
+    public boolean add()
     {
-        queue.add(new Process(this.lastID++));
+        Process process = new Process(this.lastID++);
+        this.add(process);
+        return false;
     }
 
     public void add(final int N)
     {
         for (int i = 0; i < N; i++) {
-            this.queue.add(new Process(this.lastID++));
+            this.add();
         }
     }
 
     @Override
     public String toString() {
-        return "Queue{" +
-                "queue=" + queue +
-                '}';
+        String result = "";
+        for (Process process:queue){
+            result += process;
+        }
+        return result;
     }
 
     //TODO Scheduling algorithm
