@@ -2,7 +2,7 @@ package com.company.classes;
 
 import java.util.TimerTask;
 
-public class ClockGenerator extends TimerTask {
+public class TactGenerator extends TimerTask {
     public static int getTime() {
         return time;
     }

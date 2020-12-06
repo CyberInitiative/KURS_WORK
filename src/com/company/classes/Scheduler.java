@@ -5,7 +5,7 @@ public class Scheduler {
     RejectedQueue rejectedQueue;
     CPU cpu;
     MemoryScheduler memoryScheduler;
-    ClockGenerator clockGenerator;
+    TactGenerator tactGenerator;
 
     public Scheduler(final int cpuCoresNumber, int memoryVolume) {
         this.processQueue = new ProcessQueue();
@@ -14,8 +14,8 @@ public class Scheduler {
         this.memoryScheduler = new MemoryScheduler();
         Configuration.memoryVolume = memoryVolume;
         init();
-        clockGenerator = new ClockGenerator();
-        clockGenerator.run();
+        //tactGenerator = new TactGenerator();
+        //tactGenerator.run();
     }
 
     public void init(){
@@ -23,6 +23,7 @@ public class Scheduler {
         memoryScheduler.add(new MemoryBlock(1000, 1100));
         memoryScheduler.add(new MemoryBlock(500, 800));
         memoryScheduler.add(new MemoryBlock(250, 450));
+        MemoryScheduler.fillMemoryBLock(100);
 
         processQueue.add(3);
         rejectedQueue.add(2);

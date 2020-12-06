@@ -2,6 +2,8 @@ package com.company.classes;
 
 import java.util.ArrayList;
 
+//Очередь процессов
+//Общая очередь всех процессов(?)
 public class Queue {
     private ArrayList<Process> queue;
     private int lastID;
@@ -45,6 +47,4 @@ public class Queue {
         }
         return result;
     }
-
-    //TODO Scheduling algorithm
 }

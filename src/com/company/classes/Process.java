@@ -1,39 +1,24 @@
 package com.company.classes;
 
-import java.util.Random;
-
 public class Process {
     int id;
     String name;
     int priority;
-    int time;
-    int memory;
-    int timeIn;
-    int burstTime;
+    int time; //число работы в тактах
+    int memory; //кол-во памяти
+    int arrivalTime; //время захода
+    int burstTime; // время сколько процесс отработал на ЦП
     State state;
-
+    //заменить все цифры на константы
     public Process(int id) {
         this.id = id;
-        this.memory = Utils.getRandomInteger(10,Configuration.memoryVolume/2);  //заменить все цифры на константы
+        this.memory = Utils.getRandomInteger(10,Configuration.memoryVolume/2);  //кол-во памяти, требуемое для процесса
         this.priority = Utils.getRandomInteger( Configuration.maxPriority);
         this.time = Utils.getRandomInteger(10,100);
-        this.timeIn = ClockGenerator.getTime();
+        this.arrivalTime = TactGenerator.getTime();
         this.burstTime = 0;
         this.name = "P" + this.id;
-        this.state = State.Ready;
-    }
-
-    @Override
-    public String toString() {
-        return id +
-                "{ name='" + name + '\'' +
-                ", priority=" + priority +
-                ", time=" + time +
-                ", memory=" + memory +
-                ", timeIn=" + timeIn +
-                ", burstTime=" + burstTime +
-                ", state=" + state +
-                '}' + "\n";
+        this.state = State.New;
     }
 
     public int getId() {
@@ -56,8 +41,8 @@ public class Process {
         return memory;
     }
 
-    public int getTimeIn() {
-        return timeIn;
+    public int getArrivalTime() {
+        return arrivalTime;
     }
 
     public int getBurstTime() {
@@ -78,5 +63,18 @@ public class Process {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        return id +
+                "{ name='" + name + '\'' +
+                ", priority=" + priority +
+                ", time=" + time +
+                ", memory=" + memory +
+                ", timeIn=" + arrivalTime +
+                ", burstTime=" + burstTime +
+                ", state=" + state +
+                '}' + "\n";
     }
 }

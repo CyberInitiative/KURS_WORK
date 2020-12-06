@@ -1,7 +1,7 @@
 package com.company.classes;
 
 import java.util.ArrayList;
-
+// тут определяет метод поиска
 public class MemoryScheduler {
     private static ArrayList<MemoryBlock> memoryBlocks = new ArrayList<>();
 
@@ -21,21 +21,27 @@ public class MemoryScheduler {
         memoryBlocks.sort(MemoryBlock.byEnd);
         System.out.println(print());
 
-        ArrayList<MemoryBlock> tempmemoryBlocks = new ArrayList<>();
+        ArrayList<MemoryBlock> tempMemoryBlocks = new ArrayList<>();
         //TODO find free block using given strategy;
 
         for(int i = 0; i < memoryBlocks.size()-1; i++){
             if (memoryBlocks.get(i+1).start-memoryBlocks.get(i).end > size) {
                 MemoryBlock tempMemoryBlock = new MemoryBlock(memoryBlocks.get(i).end, memoryBlocks.get(i+1).start);
-                tempmemoryBlocks.add(tempMemoryBlock);
+                tempMemoryBlocks.add(tempMemoryBlock);
+                System.out.println(tempMemoryBlock);
             }
         }
         if (Configuration.memoryVolume-memoryBlocks.get(memoryBlocks.size()-1).end > size){
             MemoryBlock tempMemoryBlock = new MemoryBlock(memoryBlocks.get(memoryBlocks.size()-1).end, Configuration.memoryVolume);
-            tempmemoryBlocks.add(tempMemoryBlock);
+            tempMemoryBlocks.add(tempMemoryBlock);
+            System.out.println(tempMemoryBlock);
         }
 
         return  0;
+    }
+
+    public static void add(MemoryBlock memoryBlock){
+        memoryBlocks.add(memoryBlock);
     }
 
     public static String print() {
@@ -44,10 +50,6 @@ public class MemoryScheduler {
             result+=memoryBlock+" ";
         }
         return result + "]";
-    }
-
-    public static void add(MemoryBlock memoryBlock){
-        memoryBlocks.add(memoryBlock);
     }
 
     @Override

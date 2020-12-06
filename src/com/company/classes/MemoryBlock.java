@@ -1,7 +1,7 @@
 package com.company.classes;
 
 import java.util.Comparator;
-
+//блок памяти
 public class MemoryBlock {
     int start;
     int end;

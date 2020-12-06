@@ -1,8 +1,9 @@
 package com.company.classes;
 
 public enum State {
-    Ready,
-    Waiting,
+    New,
     Running,
-    Finished
+    Waiting,
+    Ready,
+    Terminated
 }
