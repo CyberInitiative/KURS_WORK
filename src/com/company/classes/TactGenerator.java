@@ -21,15 +21,17 @@ public class TactGenerator extends TimerTask {
 
     @Override
     public void run() {
-        while (true)
+        //while (true)
         {
+            /*
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+             */
             incTime();
-            System.out.println(time);
         }
     }
 }

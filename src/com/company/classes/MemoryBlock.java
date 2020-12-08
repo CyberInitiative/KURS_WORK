@@ -1,8 +1,24 @@
 package com.company.classes;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 //блок памяти
 public class MemoryBlock {
+    int availableMemory;
+    int processesInBlock;
+    ArrayList<String> keys = new ArrayList<>();
+
+    public static Comparator<MemoryBlock> byAvailableMemorySize = ((o1, o2) -> o2.availableMemory - o1.availableMemory);
+
+    public MemoryBlock(int availableMemory){
+        this.availableMemory = availableMemory;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + availableMemory + " " + processesInBlock +  '}';
+    }
+    /*
     int start;
     int end;
 
@@ -17,6 +33,8 @@ public class MemoryBlock {
         this.start = start;
         this.end = end;
     }
+
+     */
 }
 
 

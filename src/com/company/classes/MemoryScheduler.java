@@ -1,20 +1,74 @@
 package com.company.classes;
 
 import java.util.ArrayList;
-// тут определяет метод поиска
+import java.util.Collections;
+import java.util.Comparator;
+
+// тут определяем метод размер блока памяти
 public class MemoryScheduler {
     private static ArrayList<MemoryBlock> memoryBlocks = new ArrayList<>();
+    private MemoryBlock biggestBlock;
+    //Process process;
 
-    public static void releaseMemoryBLock(MemoryBlock memoryBlock) {
+    public MemoryBlock getBiggestBlock() {
+        return biggestBlock;
+    }
+
+    public void setBiggestBlock(MemoryBlock biggestBlock) {
+        this.biggestBlock = biggestBlock;
+    }
+
+    /*
+    public void releaseMemoryBLock(MemoryBlock memoryBlock) {
         memoryBlocks.remove(memoryBlock);
 
         return;
     }
+     */
 
-    public static boolean fillMemoryBLock(int size) {
-        findFreeBlock(size);
-        return false;
+    public MemoryBlock fillMemoryBLock(int memorySize) {
+        //findFreeBlock(process);
+        biggestBlock = Collections.max(memoryBlocks, Comparator.comparing(s -> s.availableMemory));
+
+        if(memorySize <= biggestBlock.availableMemory){
+            biggestBlock.availableMemory = biggestBlock.availableMemory - memorySize;
+            //process.setState(State.Ready);
+            //String key = process.getName();
+            //biggestBlock.keys.add(key);
+            return biggestBlock;
+        }
+        return null;
     }
+
+/*
+    private int findFreeBlock(Process process) {
+        biggestBlock = Collections.max(memoryBlocks, Comparator.comparing(s -> s.availableMemory));
+
+        if(process.getMemory() <= biggestBlock.availableMemory){
+            biggestBlock.availableMemory = biggestBlock.availableMemory - process.getMemory();
+            process.setState(State.Ready);
+            String key = process.getName();
+            biggestBlock.keys.add(key);
+        }
+        return 0;
+    }
+
+    public void releaseBlock(){
+        Process process = new Process();
+        if(process.getState() == State.Terminated){
+            for(int i = 0; i < memoryBlocks.size(); i++){
+                for(int j = 0; j < biggestBlock.keys.size(); j++){
+                    if(process.getName().equals(biggestBlock.keys.get(j)))
+                    {
+                        biggestBlock.availableMemory = biggestBlock.availableMemory + process.getMemory();
+                        biggestBlock.keys.remove(i);
+                    }
+                }
+            }
+        }
+    }
+
+
 
     private static int findFreeBlock(int size) {
         System.out.println(print());
@@ -22,7 +76,6 @@ public class MemoryScheduler {
         System.out.println(print());
 
         ArrayList<MemoryBlock> tempMemoryBlocks = new ArrayList<>();
-        //TODO find free block using given strategy;
 
         for(int i = 0; i < memoryBlocks.size()-1; i++){
             if (memoryBlocks.get(i+1).start-memoryBlocks.get(i).end > size) {
@@ -36,12 +89,20 @@ public class MemoryScheduler {
             tempMemoryBlocks.add(tempMemoryBlock);
             System.out.println(tempMemoryBlock);
         }
-
         return  0;
     }
+ */
 
-    public static void add(MemoryBlock memoryBlock){
+    public void add(MemoryBlock memoryBlock){
         memoryBlocks.add(memoryBlock);
+    }
+
+    public MemoryBlock get(int i){
+        return memoryBlocks.get(i);
+    }
+
+    public int getSize(){
+        return memoryBlocks.size();
     }
 
     public static String print() {
@@ -51,6 +112,8 @@ public class MemoryScheduler {
         }
         return result + "]";
     }
+
+
 
     @Override
     public String toString() {

@@ -1,7 +1,5 @@
 package com.company.classes;
 
-import java.util.Arrays;
-
 public class CPU {
     public Core[] getCores() {
         return cores;
@@ -11,20 +9,21 @@ public class CPU {
         this.cores = cores;
     }
 
-    Core [] cores;
+    Core[] cores;
 
     public CPU(final int coresNumber){
         this.cores = new Core[coresNumber];
         for(int i = 0; i < coresNumber; i++){
-            this.cores[i] = new Core();
+            this.cores[i] = new Core(i);
         }
     }
 
     @Override
     public String toString() {
         String result = "[";
-        for (Core core: cores){
-            result += core.getState() + ", ";
+        for (Core core : cores){
+            result +=  core.getNumber() + " is "
+                    + (core.isIdle() ? "Idle" : "Busy") + "; " ;
         }
         return result + ']';
     }

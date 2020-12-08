@@ -1,8 +1,8 @@
 package com.company.classes;
 
-public class Core {
-    boolean isFree = true;
-    public boolean getState(){
-        return  isFree;
+public class Core extends Resource {
+
+    public Core(int number) {
+        super(number);
     }
 }
