@@ -1,15 +1,15 @@
 package com.company.classes;
 
-public class Resource {
+public class  Resource {
     private boolean isIdle = true;
-    private int coreNumber;
+    private int resourceNumber;
 
     public Resource(int number) {
-        this.coreNumber = number;
+        this.resourceNumber = number;
     }
 
     public int getNumber() {
-        return coreNumber;
+        return resourceNumber;
     }
 
     public boolean isIdle(){

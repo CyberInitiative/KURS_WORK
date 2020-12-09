@@ -1,5 +1,9 @@
 package com.company.classes;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Process{
     private int id;
     private String name;
@@ -10,7 +14,10 @@ public class Process{
     private int burstTime; // Общее время, необходимое центральному процессору для выполнения всего процесса (не включает в себя время ожидания)
     private State state;
     private MemoryBlock memoryBlock;
-    private Resource resource;
+    private Core core;
+    private Device device;
+    private Timer timer = new Timer();
+    private int maxInitAttempts = 3;
 
     //заменить все цифры на константы
     public Process(int id) {
@@ -65,22 +72,26 @@ public class Process{
     public void setState(State state) {
         this.state = state;
         if(state == State.Running){
-            // Start timer
-
+            startTimer();
         }
-        if(state == State.Terminated){        }
+        else if(state == State.Terminated){
+            stopTimer();
+            core.setIdle(true);
+            core = null;
+            releaseMemory();
+        }
     }
 
     public void setPriority(int priority) {
         this.priority = priority;
     }
 
-    public Resource getCore() {
-        return resource;
+    public Core getCore() {
+        return core;
     }
 
-    public void setCore(Resource resource) {
-        this.resource = resource;
+    public void setCore(Core core) {
+        this.core = core;
     }
 
     public MemoryBlock getMemoryBlock() {
@@ -95,6 +106,53 @@ public class Process{
         this.memoryBlock.availableMemory += this.memory;
     }
 
+    public void setDevice(Device device) {
+        this.device = device;
+    }
+
+    public int getMaxInitAttempts() {
+        return maxInitAttempts;
+    }
+
+    public void setMaxInitAttempts() {
+        this.maxInitAttempts--;
+    }
+
+    private void startTimer(){
+        int requestDeviceTime = Utils.getRandomInteger(0,time / 2);
+        var me = this;
+        TimerTask repeatedTask = new TimerTask() {
+            public void run() {
+                if(burstTime >= requestDeviceTime && state == State.Running){
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    System.out.println(device);
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    state = State.Waiting;
+                    int resourceNumber = device.getResource();
+                    if(resourceNumber != -1){
+                        //if(device.doWork(resourceNumber)) {
+                        device.doWork(resourceNumber);
+                        state = State.Running;
+                        stopTimer();
+                        //}
+                    }
+                    else
+                        System.out.println(new Date() + " Process " + me.name + " is waiting for resource");
+
+
+                }
+            }
+        };
+
+        timer.schedule(repeatedTask, 500, 500);
+    }
+
+    private void stopTimer(){
+        timer.cancel();
+    }
+
+
+
     @Override
     public String toString() {
         return id +
@@ -105,7 +163,7 @@ public class Process{
                 ", timeIn=" + arrivalTime +
                 ", burstTime=" + burstTime +
                 ", state=" + state +
-                (resource != null ? (", core number=" + resource.getNumber()) : "") +
+                (core != null ? (", core number=" + core.getNumber()) : "") +
                 '}' + "\n";
     }
 

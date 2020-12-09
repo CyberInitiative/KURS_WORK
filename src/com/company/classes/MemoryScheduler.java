@@ -117,7 +117,7 @@ public class MemoryScheduler {
 
     @Override
     public String toString() {
-        String result = "[";
+        String result = "[ ";
         for (int i = 0; i < memoryBlocks.size(); i++){
             result+=memoryBlocks.get(i) + " ";
         }

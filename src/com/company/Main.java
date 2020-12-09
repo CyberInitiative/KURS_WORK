@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
         Date date = new Date();
 
-        // ¬ывод текущей даты и времени с использованием toString()
         System.out.println(date.toString());
         /*
         MemoryScheduler memoryScheduler = new MemoryScheduler();
@@ -40,6 +39,8 @@ public class Main {
         //queue.add(5);
         //System.out.println(queue);
         Scheduler scheduler = new Scheduler(4,4096);
+        scheduler.init();
+        scheduler.schedule();
 
         System.out.println(scheduler);
         System.out.println(date.toString());

@@ -9,18 +9,18 @@ public class CPU {
         this.cores = cores;
     }
 
-    Core[] cores;
+    private Core[] cores;
 
     public CPU(final int coresNumber){
-        this.cores = new Core[coresNumber];
+        cores = new Core[coresNumber];
         for(int i = 0; i < coresNumber; i++){
-            this.cores[i] = new Core(i);
+            cores[i] = new Core(i);
         }
     }
 
     @Override
     public String toString() {
-        String result = "[";
+        String result = "[ ";
         for (Core core : cores){
             result +=  core.getNumber() + " is "
                     + (core.isIdle() ? "Idle" : "Busy") + "; " ;
