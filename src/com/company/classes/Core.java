@@ -6,5 +6,8 @@ public class Core extends Resource {
         super(number);
     }
 
-    //public void setCore
+    @Override
+    public String toString() {
+        return "core #" + this.resourceNumber;
+    }
 }

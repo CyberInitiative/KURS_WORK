@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-// тут определяем метод размер блока памяти
 public class MemoryScheduler {
     private static ArrayList<MemoryBlock> memoryBlocks = new ArrayList<>();
     private MemoryBlock biggestBlock;
-    //Process process;
 
     public MemoryBlock getBiggestBlock() {
         return biggestBlock;
@@ -28,10 +26,10 @@ public class MemoryScheduler {
 
     public MemoryBlock fillMemoryBLock(int memorySize) {
         //findFreeBlock(process);
-        biggestBlock = Collections.max(memoryBlocks, Comparator.comparing(s -> s.availableMemory));
+        biggestBlock = Collections.max(memoryBlocks, Comparator.comparing(s -> s.getAvailableMemory()));
 
-        if(memorySize <= biggestBlock.availableMemory){
-            biggestBlock.availableMemory = biggestBlock.availableMemory - memorySize;
+        if(memorySize <= biggestBlock.getAvailableMemory()){
+            biggestBlock.setAvailableMemory(biggestBlock.getAvailableMemory() - memorySize);
             //process.setState(State.Ready);
             //String key = process.getName();
             //biggestBlock.keys.add(key);

@@ -22,9 +22,9 @@ public class CPU {
     public String toString() {
         String result = "[ ";
         for (Core core : cores){
-            result +=  core.getNumber() + " is "
-                    + (core.isIdle() ? "Idle" : "Busy") + "; " ;
+            result +=  core + " is "
+                    + (core.isIdle() ? "Idle" : "Busy") + "; ";
         }
-        return result + ']';
+        return result + "]";
     }
 }

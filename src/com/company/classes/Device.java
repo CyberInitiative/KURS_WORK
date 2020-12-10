@@ -58,9 +58,9 @@ public class Device {
     public String toString() {
         String result = "[ ";
         for (Resource resource: resources){
-            result +=  resource.getNumber() + " is "
-                    + (resource.isIdle() ? "Idle" : "Busy") + "; " ;
+            result +=  resource + " is "
+                    + (resource.isIdle() ? "Idle" : "Busy") + "; ";
         }
-        return result + ']';
+        return result + "]";
     }
 }

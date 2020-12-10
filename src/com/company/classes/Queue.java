@@ -1,16 +1,11 @@
 package com.company.classes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 //Общая очередь всех процессов. Все новые процессы попадают сюда.
 public class Queue {
     private ArrayList<Process> queue;
     private int lastID;
-    //ProcessQueue processQueue = new ProcessQueue();
 
     public int getLastID() {
         return lastID;
@@ -51,43 +46,36 @@ public class Queue {
         this.queue.remove(process);
     }
 
-    /*
-    public void readySearcher(){
-        for (int i = 0; i < queue.size(); i++){
-            if(queue.get(i).state == State.Ready){
-                processQueue.add(queue.get(i));
-            }
-        }
-    }
-
-     */
-
     public void add(final int N) {
         for (int i = 0; i < N; i++) {
-
+            /*
             try {
                 Thread.sleep(Utils.getRandomInteger(500, 3000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-
+            */
             this.add();
         }
     }
 
-    /*
-    public void sortByArrival(){
-       for(int i = 0; i < queue.size() - 1; i++){
-           for(int j = 0; j < queue.size() - i - 1; j++){
-               if(queue.get(j).getArrivalTime() > queue.get(j + 1).getArrivalTime()){
-                   Process temp = queue.get(j);
-                   queue.get(j) = queue.get(j + 1);
-               }
-           }
-       }
+    public void addManual(final int N) {
+        Scanner input = new Scanner(System.in);
+        for (int i = 0; i < N; i++) {
+            Process process = new Process();
+            System.out.println("Enter the PID");
+            process.setId(input.nextInt());
+            System.out.println("Set priority");
+            process.setPriority(input.nextInt());
+            System.out.println("Set time");
+            process.setTime(input.nextInt());
+            System.out.println("Set memory");
+            process.setMemory(input.nextInt());
+            this.add(process);
+        }
     }
-     */
+
+    /*
     public void sortByArrivalTime(){
         Process [] sortedQueue = this.queue.toArray(new Process[0]);
         for(int i = 0; i < sortedQueue.length - 1; i++){
@@ -101,6 +89,7 @@ public class Queue {
         }
         this.queue = new ArrayList(Arrays.asList(sortedQueue));
     }
+    /*
 
     public void sortByPriority(){
         Process [] sortedQueue = this.queue.toArray(new Process[0]);
@@ -109,30 +98,73 @@ public class Queue {
 
         int indexOfFirstElement = 0;
         Process first = sortedQueue[0];
-        //in reverse so in case there is a clash it favours lower id
         for (int i = n -1; i > 0; i--) {
-            //find process with shortest duration and at time 0
             if (sortedQueue[i].getArrivalTime() <= first.getArrivalTime() && first.getPriority() >= sortedQueue[i].getPriority()) {
                 first = sortedQueue[i];
                 indexOfFirstElement = i;
             }
         }
-
-        //swap the current first element with the new one
         Process temp = sortedQueue[indexOfFirstElement];
         sortedQueue[indexOfFirstElement] = sortedQueue[0];
         sortedQueue[0] = temp;
         this.queue = new ArrayList(Arrays.asList(sortedQueue));
     }
+     */
 
+    public synchronized void sortByPriorityAndArrivalTime(State state){
+        Process [] sortedQueue = this.queue.toArray(new Process[0]);
+        int temp;
+        String stemp;
+        //Process tempProcess;
+        for(int i = 0; i < sortedQueue.length; i++){
+            if(sortedQueue[i].getState() != state)
+                continue;
+            for(int j = 0; j <sortedQueue.length - i - 1; j++){
+                //if(sortedQueue[j].getState() == State.Running)
+                //    continue;
+                if(sortedQueue[j].getArrivalTime() > sortedQueue[j + 1].getArrivalTime()){
+                    temp = sortedQueue[j].getArrivalTime();
+                    sortedQueue[j].setArrivalTime(sortedQueue[j+1].getArrivalTime());
+                    sortedQueue[j + 1].setArrivalTime(temp);
 
-    /*
-    public void HPF(){
-        for(int i = 0; i < queue.size(); i++){
-            queue.sort(Process.byPriority);
+                    temp = sortedQueue[j].getBurstTime();
+                    sortedQueue[j].setBurstTime(sortedQueue[j+1].getBurstTime());
+                    sortedQueue[j + 1].setBurstTime(temp);
+
+                    temp = sortedQueue[j].getPriority();
+                    sortedQueue[j].setPriority(sortedQueue[j+1].getPriority());
+                    sortedQueue[j + 1].setPriority(temp);
+
+                    stemp = sortedQueue[j].getName();
+                    sortedQueue[j].setName(sortedQueue[j+1].getName());
+                    sortedQueue[j + 1].setName(stemp);
+
+                    //tempProcess  = sortedQueue[j];
+                    //sortedQueue[j] = sortedQueue[j+1];
+                    //sortedQueue[j + 1] = tempProcess;
+                }
+                if(sortedQueue[j].getArrivalTime() == sortedQueue[j+1].getArrivalTime()){
+                    if(sortedQueue[j].getPriority() > sortedQueue[j+1].getPriority()){
+                        temp = sortedQueue[j].getArrivalTime();
+                        sortedQueue[j].setArrivalTime(sortedQueue[j+1].getArrivalTime());
+                        sortedQueue[j + 1].setArrivalTime(temp);
+
+                        temp = sortedQueue[j].getBurstTime();
+                        sortedQueue[j].setBurstTime(sortedQueue[j+1].getBurstTime());
+                        sortedQueue[j + 1].setBurstTime(temp);
+
+                        temp = sortedQueue[j].getPriority();
+                        sortedQueue[j].setPriority(sortedQueue[j+1].getPriority());
+                        sortedQueue[j + 1].setPriority(temp);
+
+                        stemp = sortedQueue[j].getName();
+                        sortedQueue[j].setName(sortedQueue[j+1].getName());
+                        sortedQueue[j + 1].setName(stemp);
+                    }
+                }
+            }
         }
     }
-     */
 
     @Override
     public String toString() {

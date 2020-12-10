@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 //блок памяти
 public class MemoryBlock {
-    int availableMemory;
-    int processesInBlock;
-    ArrayList<String> keys = new ArrayList<>();
+    private int availableMemory;
 
     public static Comparator<MemoryBlock> byAvailableMemorySize = ((o1, o2) -> o2.availableMemory - o1.availableMemory);
 
@@ -16,7 +14,15 @@ public class MemoryBlock {
 
     @Override
     public String toString() {
-        return "{" + availableMemory + " " + processesInBlock +  '}';
+        return "{" + availableMemory + '}';
+    }
+
+    public int getAvailableMemory() {
+        return availableMemory;
+    }
+
+    public void setAvailableMemory(int availableMemory) {
+        this.availableMemory = availableMemory;
     }
     /*
     int start;

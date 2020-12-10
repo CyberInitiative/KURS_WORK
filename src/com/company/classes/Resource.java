@@ -1,8 +1,8 @@
 package com.company.classes;
 
 public class  Resource {
-    private boolean isIdle = true;
-    private int resourceNumber;
+    protected boolean isIdle = true;
+    protected int resourceNumber;
 
     public Resource(int number) {
         this.resourceNumber = number;
@@ -19,4 +19,10 @@ public class  Resource {
     public void setIdle(boolean idle){
         isIdle = idle;
     }
+
+    @Override
+    public String toString() {
+        return "resource #" + this.resourceNumber;
+    }
+
 }

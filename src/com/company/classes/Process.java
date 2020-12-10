@@ -17,9 +17,9 @@ public class Process{
     private Core core;
     private Device device;
     private Timer timer = new Timer();
-    private int maxInitAttempts = 3;
+    //private int maxInitAttempts = 3;
 
-    //заменить все цифры на константы
+    //TODO заменить все цифры на константы
     public Process(int id) {
         this.id = id;
         this.memory = Utils.getRandomInteger(10,Configuration.memoryVolume/4);  //кол-во памяти, требуемое для процесса
@@ -30,9 +30,28 @@ public class Process{
         this.name = "P" + this.id;
         this.state = State.New;
     }
+    public Process(int id, String name, int priority, int time, int memory) {
+        this.id = id;
+        this.name = "P" + this.id;
+        this.priority = priority;
+        this.time = time;
+        this.memory = memory;
+        this.arrivalTime = TactGenerator.getTime();
+        this.burstTime = 0;
+        this.state = State.New;
+    }
 
     public Process() {
+        this.id = id;
+        this.name = name;
+        this.priority = priority;
+        this.time = time;
+        this.memory = memory;
+        this.arrivalTime = TactGenerator.getTime();
+        this.burstTime = 0;
+        this.state = State.New;
     }
+
     public int getId() {
         return id;
     }
@@ -63,6 +82,10 @@ public class Process{
 
     public State getState() {
         return state;
+    }
+
+    public void setArrivalTime(int arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public void setBurstTime(int burstTime) {
@@ -103,19 +126,36 @@ public class Process{
     }
 
     public void releaseMemory(){
-        this.memoryBlock.availableMemory += this.memory;
+        int memory = memoryBlock.getAvailableMemory();
+        this.memoryBlock.setAvailableMemory(memory += this.memory);
     }
 
     public void setDevice(Device device) {
         this.device = device;
     }
-
+/*
     public int getMaxInitAttempts() {
         return maxInitAttempts;
     }
 
     public void setMaxInitAttempts() {
         this.maxInitAttempts--;
+    }
+ */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public void setMemory(int memory) {
+        this.memory = memory;
     }
 
     private void startTimer(){
@@ -138,20 +178,15 @@ public class Process{
                     }
                     else
                         System.out.println(new Date() + " Process " + me.name + " is waiting for resource");
-
-
                 }
             }
         };
 
         timer.schedule(repeatedTask, 500, 500);
     }
-
     private void stopTimer(){
         timer.cancel();
     }
-
-
 
     @Override
     public String toString() {

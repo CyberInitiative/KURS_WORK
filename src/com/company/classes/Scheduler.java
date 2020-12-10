@@ -2,6 +2,7 @@ package com.company.classes;
 
 import java.util.Date;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Scheduler {
     private Queue jobsQueue;
@@ -33,28 +34,63 @@ public class Scheduler {
         //schedule();
     }
 
+    public void addProcess(int number){
+        jobsQueue.add(number);
+        for (int i = 0; i < jobsQueue.getSize(); i++) {
+            var process = jobsQueue.get(i);
+            if(process.getState() == State.New)
+                initProcess(process);
+        }
+
+        jobsQueue.sortByPriorityAndArrivalTime(State.Ready);
+    }
+
+    public void addProcessManual(int number){
+        jobsQueue.addManual(number);
+        for (int i = 0; i < jobsQueue.getSize(); i++) {
+            var process = jobsQueue.get(i);
+            if(process.getState() == State.New)
+                initProcess(process);
+        }
+
+        jobsQueue.sortByPriorityAndArrivalTime(State.Ready);
+    }
+
+    public void addProcessRandom(int time){
+        Timer timer = new Timer();
+
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                jobsQueue.add(1);
+                jobsQueue.sortByPriorityAndArrivalTime(State.Ready);
+            }
+        };
+        timer.schedule(timerTask, 500);
+    }
+
     public void init() {
 
         Timer timer = new Timer();
         timer.schedule(tactGenerator, 1000, 1000);
         tactGenerator.run();
 
-        jobsQueue.add(4);
+        //jobsQueue.add(10);
         memoryScheduler.add(new MemoryBlock(200));
         memoryScheduler.add(new MemoryBlock(1200));
         memoryScheduler.add(new MemoryBlock(1200));
         memoryScheduler.add(new MemoryBlock(1200));
+        /*
         for (int i = 0; i < jobsQueue.getSize(); i++) {
             initProcess(jobsQueue.get(i));
         }
-
-        readyQueue.sortByPriority();
+        */
+        //readyQueue.sortByPriority();
         //schedule();
     }
 
     public void schedule() {
-
-        int initAttempts = 3;
+        //readyQueue.sortByPriority();
+        //int initAttempts = 3;
 
         do {
             /*
@@ -68,7 +104,6 @@ public class Scheduler {
                 }
             }
             */
-
             for (int i = 0; i < readyQueue.getSize(); i++) {
                 var process = readyQueue.get(i);
 
@@ -132,15 +167,17 @@ public class Scheduler {
                 var process = jobsQueue.get(i);
                 if(process.getState() == State.New)
                 {
-                    if(process.getMaxInitAttempts() > 0)
-                        initProcess(process);
-                    else {
-                        rejectedQueue.add(process);
-                        jobsQueue.remove(process);
-                    }
+                    //if(process.getMaxInitAttempts() > 0)
+                    initProcess(process);
+                    readyQueue.sortByPriorityAndArrivalTime(State.Ready);
+
+                    //else {
+                    //    rejectedQueue.add(process);
+                    //    jobsQueue.remove(process);
+                    //}
                 }
             }
-
+            /*
             boolean stopSchedule = true;
             for (int i = 0; i < jobsQueue.getSize(); i++) {
                 var process = jobsQueue.get(i);
@@ -152,7 +189,7 @@ public class Scheduler {
 
             if (stopSchedule)
                 break;
-
+            */
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -172,19 +209,18 @@ public class Scheduler {
             process.setDevice(device);
             readyQueue.add(process);
         }
-        else {
-            process.setMaxInitAttempts();
-        }
+        //else {
+        //    process.setMaxInitAttempts();
+        //}
     }
 
     @Override
     public String toString() {
-        return "Scheduler{" +
-                "jobs queue = " + jobsQueue +
-                "process queue =" + readyQueue +
-                "rejected queue =" + rejectedQueue +
-                ", cpu=" + cpu +
-                ", memoryScheduler =" + memoryScheduler +
+        return "Scheduler {" + "\n" +
+                "jobs queue: [ " + "\n" + jobsQueue + " ]" + " \n" +
+                "rejected queue: [" +  "\n" +rejectedQueue + " ]" + " \n" +
+                "CPU:"  + cpu + "\n" +
+                "memoryScheduler: "  + memoryScheduler +
                 '}';
     }
 }
