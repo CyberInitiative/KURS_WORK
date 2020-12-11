@@ -117,7 +117,7 @@ public class Queue {
         String stemp;
         //Process tempProcess;
         for(int i = 0; i < sortedQueue.length; i++){
-            if(sortedQueue[i].getState() != state)
+            if(sortedQueue[i].getState() != state.Ready)
                 continue;
             for(int j = 0; j <sortedQueue.length - i - 1; j++){
                 //if(sortedQueue[j].getState() == State.Running)

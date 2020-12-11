@@ -20,6 +20,10 @@ public class  Resource {
         isIdle = idle;
     }
 
+    public String getState() {
+        return isIdle ? "Idle" : "Busy";
+    }
+
     @Override
     public String toString() {
         return "resource #" + this.resourceNumber;

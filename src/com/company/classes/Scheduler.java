@@ -56,6 +56,10 @@ public class Scheduler {
         jobsQueue.sortByPriorityAndArrivalTime(State.Ready);
     }
 
+    public void add(Process process){
+        jobsQueue.add(process);
+    }
+
     public void addProcessRandom(int time){
         Timer timer = new Timer();
 
@@ -65,7 +69,7 @@ public class Scheduler {
                 jobsQueue.sortByPriorityAndArrivalTime(State.Ready);
             }
         };
-        timer.schedule(timerTask, 500);
+        timer.schedule(timerTask, time);
     }
 
     public void init() {
@@ -112,6 +116,7 @@ public class Scheduler {
                         if (core.isIdle()) {
                             //var process = readyQueue.get(0);
                             process.setState(State.Running);
+                            process.setRunTime(TactGenerator.getTime());
                             //if(processQueue.getSize() > 0) {
                             core.setIdle(false);
                             process.setCore(core);
@@ -122,7 +127,7 @@ public class Scheduler {
                 if(process.getState() != State.Running)
                     continue;
 
-                process.setBurstTime(TactGenerator.getTime() - process.getArrivalTime());
+                process.setBurstTime(TactGenerator.getTime() - process.getRunTime() - process.getIdleTime());
 
                 if (process.getBurstTime() >= process.getTime()) {
 
@@ -201,6 +206,10 @@ public class Scheduler {
         } while (true);
     }
 
+    public MemoryScheduler getMemoryScheduler() {
+        return memoryScheduler;
+    }
+
     private void initProcess(Process process){
         var block = memoryScheduler.fillMemoryBLock(process.getMemory());
         if(block != null){
@@ -213,6 +222,47 @@ public class Scheduler {
         //    process.setMaxInitAttempts();
         //}
     }
+
+    public Queue getJobsQueue() {
+        return jobsQueue;
+    }
+
+    public void setJobsQueue(Queue jobsQueue) {
+        this.jobsQueue = jobsQueue;
+    }
+
+    public Queue getReadyQueue() {
+        return readyQueue;
+    }
+
+    public void setReadyQueue(Queue readyQueue) {
+        this.readyQueue = readyQueue;
+    }
+
+    public Queue getWaitingQueue() {
+        return waitingQueue;
+    }
+
+    public void setWaitingQueue(Queue waitingQueue) {
+        this.waitingQueue = waitingQueue;
+    }
+
+    public Queue getRejectedQueue() {
+        return rejectedQueue;
+    }
+
+    public void setRejectedQueue(Queue rejectedQueue) {
+        this.rejectedQueue = rejectedQueue;
+    }
+
+    public static CPU getCpu() {
+        return cpu;
+    }
+
+    public static Device getDevice() {
+        return device;
+    }
+
 
     @Override
     public String toString() {

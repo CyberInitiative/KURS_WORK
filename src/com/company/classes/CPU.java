@@ -1,6 +1,19 @@
 package com.company.classes;
 
 public class CPU {
+
+    private Core[] cores;
+
+    public CPU() {
+    }
+
+    public CPU(final int coresNumber){
+        cores = new Core[coresNumber];
+        for(int i = 0; i < coresNumber; i++){
+            cores[i] = new Core(i);
+        }
+    }
+
     public Core[] getCores() {
         return cores;
     }
@@ -9,13 +22,8 @@ public class CPU {
         this.cores = cores;
     }
 
-    private Core[] cores;
-
-    public CPU(final int coresNumber){
-        cores = new Core[coresNumber];
-        for(int i = 0; i < coresNumber; i++){
-            cores[i] = new Core(i);
-        }
+    public Core getCore(int core){
+        return cores[core];
     }
 
     @Override

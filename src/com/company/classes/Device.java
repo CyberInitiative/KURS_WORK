@@ -3,9 +3,6 @@ package com.company.classes;
 import java.util.Date;
 
 public class Device {
-   // public Resource[] getResources() {
-   //     return resources;
-   // }
 
     private Resource[] resources;
 
@@ -17,42 +14,38 @@ public class Device {
             resources[i] = new Resource(i);
         }
     }
-    public void doWork(int number){
-        //if(resources[number].isIdle()){
-            try {
-                //resources[number].setIdle(false);
-                int sleepTime = Utils.getRandomInteger(10000,20000);
-                System.out.println("Do work: " + number + " Sleep time: " +  sleepTime);
-                Thread.sleep(sleepTime);
-                System.out.println("Do work: " + number + " We are out");
-                resources[number].setIdle(true);
-                //return true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        //}
-        //return false;
+
+    public Resource[] getResources() {
+        return resources;
     }
 
-    public synchronized int getResource(){
+    public Resource getResource(int resource){
+        return resources[resource];
+    }
+
+    public synchronized int requestResource(){
         for(Resource resource : resources){
             if(resource.isIdle() == true){
                 resource.setIdle(false);
                 System.out.println("Found idle resource " + resource.getNumber());
 
                 return resource.getNumber();
-
             }
         }
         return  -1;
     }
 
-    //public void setCores(Resource[] resources) {
-    //   resources = resources;
-    //}
-
-
-
+    public void doWork(int number){
+        try {
+            int sleepTime = Utils.getRandomInteger(10000,20000);
+            System.out.println("Do work: " + number + " Sleep time: " +  sleepTime);
+            Thread.sleep(sleepTime);
+            System.out.println("Do work: " + number + " We are out");
+            resources[number].setIdle(true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String toString() {

@@ -12,10 +12,14 @@ public class Process{
     private int memory; //кол-во памяти
     private int arrivalTime; //время захода
     private int burstTime; // Общее время, необходимое центральному процессору для выполнения всего процесса (не включает в себя время ожидания)
+    private int idleTime;
+    private int runTime;
+    //private int startWaitTime;
     private State state;
     private MemoryBlock memoryBlock;
     private Core core;
     private Device device;
+    private int resourceId = -1;
     private Timer timer = new Timer();
     //private int maxInitAttempts = 3;
 
@@ -27,7 +31,7 @@ public class Process{
         this.time = Utils.getRandomInteger(10,100);
         this.arrivalTime = TactGenerator.getTime();
         this.burstTime = 0;
-        this.name = "P" + this.id;
+        this.name = "PID" + this.id;
         this.state = State.New;
     }
     public Process(int id, String name, int priority, int time, int memory) {
@@ -158,27 +162,66 @@ public class Process{
         this.memory = memory;
     }
 
+    public int getIdleTime() {
+        return idleTime;
+    }
+
+    public int getRunTime() {
+        return runTime;
+    }
+
+    public void setRunTime(int runTime) {
+        this.runTime = runTime;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
     private void startTimer(){
         int requestDeviceTime = Utils.getRandomInteger(0,time / 2);
         var me = this;
+
         TimerTask repeatedTask = new TimerTask() {
+            int startWaitTime = 0;
+
             public void run() {
+                /*
+                if(burstTime >= requestDeviceTime && state == State.Running){
+                    state = State.Waiting;
+                    startWaitTime = TactGenerator.getTime();
+                }
+
+                if(resourceId == -1) {
+                    resourceId = device.requestResource();
+                    if (resourceId != -1) {
+                        device.doWork(resourceId);
+                        idleTime += (TactGenerator.getTime() - startWaitTime);
+                        state = State.Running;
+                        stopTimer();
+                        resourceId = -1;
+                    } else
+                        System.out.println(new Date() + " Process " + me.name + " is waiting for resource");
+                }
+                */
+
                 if(burstTime >= requestDeviceTime && state == State.Running){
                     System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                     System.out.println(device);
                     System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                     state = State.Waiting;
-                    int resourceNumber = device.getResource();
+                    startWaitTime = TactGenerator.getTime();
+                    int resourceNumber = device.requestResource();
                     if(resourceNumber != -1){
-                        //if(device.doWork(resourceNumber)) {
                         device.doWork(resourceNumber);
+                        idleTime += (TactGenerator.getTime() - startWaitTime);
                         state = State.Running;
                         stopTimer();
-                        //}
                     }
                     else
                         System.out.println(new Date() + " Process " + me.name + " is waiting for resource");
                 }
+
             }
         };
 
@@ -191,7 +234,7 @@ public class Process{
     @Override
     public String toString() {
         return id +
-                "{ name='" + name + '\'' +
+                "{ PID='" + name + '\'' +
                 ", priority=" + priority +
                 ", time=" + time +
                 ", memory=" + memory +
